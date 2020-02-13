@@ -2,7 +2,7 @@
 
 <br>
 
-![CloudMage](images/cloudmage-glow-banner.png)
+![CloudMage](https://github.com/TheCloudMage/Common-Images/raw/master/cloudmage/cloudmage-glow-banner.png)
 
 <br><br>
 
@@ -134,7 +134,7 @@ print(repo_user) # None
 
 <br><br>
 
-> :spiral_notepad: &nbsp;[__Optional Verbose Class Constructor Argument:__](Note) <br> When instantiating the class an optional `verbose` argument can be provided. The argument expects a bool value of either `True` or `False`. By default verbose is set to False. If `verbose=True` is passed during object instantiation, then debug mode is turned on allowing the class to output DEBUG, INFO, and WARNING messages to stdout, and ERROR messages to stderr.
+> ![CloudMage](https://github.com/TheCloudMage/Common-Images/raw/master/icons/note.png) &nbsp;&nbsp; [__Optional Verbose Class Constructor Argument:__](Note) <br> When instantiating the class an optional `verbose` argument can be provided. The argument expects a bool value of either `True` or `False`. By default verbose is set to False. If `verbose=True` is passed during object instantiation, then debug mode is turned on allowing the class to output DEBUG, INFO, and WARNING messages to stdout, and ERROR messages to stderr.
 
 <br>
 
@@ -161,7 +161,7 @@ print(repo_user) # None
 
 <br><br>
 
-> :spiral_notepad: &nbsp;[__Optional Log Object:__](Note) <br> When instantiating the class an optional `log` argument can also be provided. The argument expects an Logger object to be passed as an input. If passed then all DEBUG, INFO, WARNING, and ERROR messages will be printed to the standard log levels (`log.debug()`, `log.info()`, `log.warning()`, `log.error()`) and printed to the passed respective logger object method.
+> ![CloudMage](https://github.com/TheCloudMage/Common-Images/raw/master/icons/note.png) &nbsp;&nbsp; [__Optional Log Object:__](Note) <br> When instantiating the class an optional `log` argument can also be provided. The argument expects an Logger object to be passed as an input. If passed then all DEBUG, INFO, WARNING, and ERROR messages will be printed to the standard log levels [`log.debug()`, `log.info()`, `log.warning()`, `log.error()`] and printed to the passed respective logger object method.
 
 <br>
 
@@ -252,6 +252,7 @@ This class takes a git repository URL as input, and then uses that input to cons
 <br>
 
 __Github Response Properties:__
+
 * `name`: The name of the targeted Git Repository (derived from provided URL string)
 * `namespace`: The namespace under which the repository is owned (derived from provided URL string)
 * `id`: The repositories Github id
@@ -325,7 +326,7 @@ print(json.dumps, indent=4, sort_keys=True)
 
 <br><br>
 
-> :spiral_notepad: &nbsp;[__Passing an Authentication Token:__](Note) <br> When instantiating the class, an option `auth_token` argument can be provided. The argument is a valid auth token issued from the platform provider. If provided, the auth_token will be passed to the request handler method, where the method will construct request headers including the authentication token for authenticated requests to private repositories.
+> ![CloudMage](https://github.com/TheCloudMage/Common-Images/raw/master/icons/note.png) &nbsp;&nbsp; [__Passing an Authentication Token:__](Note) <br> When instantiating the class, an option `auth_token` argument can be provided. The argument is a valid auth token issued from the platform provider. If provided, the auth_token will be passed to the request handler method, where the method will construct request headers including the authentication token for authenticated requests to private repositories.
 
 <br>
 
@@ -359,7 +360,7 @@ print(json.dumps, indent=4, sort_keys=True)
 
 <br><br>
 
-> :spiral_notepad: &nbsp;[__Optional Verbose Class Constructor Argument:__](Note) <br> When instantiating the class an optional `verbose` argument can be provided. The argument expects a bool value of either `True` or `False`. By default verbose is set to False. If `verbose=True` is passed during object instantiation, then debug mode is turned on allowing the class to output DEBUG, INFO, and WARNING messages to stdout, and ERROR messages to stderr.repositories.
+> ![CloudMage](https://github.com/TheCloudMage/Common-Images/raw/master/icons/note.png) &nbsp;&nbsp; [__Optional Verbose Class Constructor Argument:__](Note) <br> When instantiating the class an optional `verbose` argument can be provided. The argument expects a bool value of either `True` or `False`. By default verbose is set to False. If `verbose=True` is passed during object instantiation, then debug mode is turned on allowing the class to output DEBUG, INFO, and WARNING messages to stdout, and ERROR messages to stderr.repositories.
 
 <br>
 
@@ -395,7 +396,7 @@ print(json.dumps, indent=4, sort_keys=True)
 
 <br><br>
 
-> :spiral_notepad: &nbsp;[__Optional Log Object:__](Note) <br> When instantiating the class an optional `log` argument can also be provided. The argument expects an Logger object to be passed as an input. If passed then all DEBUG, INFO, WARNING, and ERROR messages will be printed to the standard log levels (`log.debug()`, `log.info()`, `log.warning()`, `log.error()`) and printed to the passed respective logger object method.
+> ![CloudMage](https://github.com/TheCloudMage/Common-Images/raw/master/icons/note.png) &nbsp;&nbsp; [__Optional Log Object:__](Note) <br> When instantiating the class an optional `log` argument can also be provided. The argument expects an Logger object to be passed as an input. If passed then all DEBUG, INFO, WARNING, and ERROR messages will be printed to the standard log levels (`log.debug()`, `log.info()`, `log.warning()`, `log.error()`) and printed to the passed respective logger object method.
 
 <br>
 
@@ -465,7 +466,7 @@ To view the project changelog see: [ChangeLog:](CHANGELOG.md)
 
 <br><br>
 
-## ![TheCloudMage](images/cloudmage-profile.png) &nbsp;&nbsp;Contacts and Contributions
+## ![TheCloudMage](https://github.com/TheCloudMage/Common-Images/raw/master/cloudmage/cloudmage-profile.png) &nbsp;&nbsp;Contacts and Contributions
 
 This project is owned and maintained by: [@rnason](https://github.com/rnason)
 
