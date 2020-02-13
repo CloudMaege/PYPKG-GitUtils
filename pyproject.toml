@@ -9,6 +9,9 @@ include = [
     "CHANGELOG.md"
 ]
 homepage = "https://github.com/TheCloudMage/PyPkgs-GitUtils"
+packages = [
+    {include = "gitutils"}
+]
 
 [tool.poetry.dependencies]
 python = "^3.6"
@@ -18,7 +21,8 @@ requests = "^2.22.0"
 pytest = "^4.6"
 
 [tool.poetry.scripts]
-GitHubAPI = 'cloudmage-gitutils.github_api'
+GitConfigParser = 'gitutils.gitconfig_parser'
+GitHubAPI = 'gitutils.github_api'
 
 [tool.poetry.urls]
 "Releases" = "https://github.com/TheCloudMage/PyPkgs-GitUtils/releases"
