@@ -2,6 +2,10 @@
 
 <br>
 
+![CloudMage](images/cloudmage-glow-banner.png)
+
+<br><br>
+
 ## Description
 
 This utility package was created to allow quick and easy access to Git repository data for a provided repository. The purpose of this library is to be able to either automatically detect a projects configured Git repository by searching for and parsing a .git/config file in a given file path, or to take an input consisting simply of the repositories URL (HTTP | Git formatted) along with an optional access token. Once the repository has been determined by either means, the library will create and return an object instance consisting of the repository data received from the determined providers API parsed into the respective object properties.
@@ -20,7 +24,7 @@ This library is compatible with Python 3.6 and higher. It may work with earlier 
 
 <br><br>
 
-## Installation
+## Package Installation
 
 This library has been published to [PyPi](https://pypi.org/project/cloudmage-gitutils/) and can be installed via normal python package manager conventions such as [pip](https://pip.pypa.io/en/stable/) or [poetry](https://pypi.org/project/poetry/).
 
@@ -32,17 +36,15 @@ pip3 install cloudmage-gitutils
 
 <br><br>
 
-## Included Classes
-
-<br>
-
-### GitConfigParser
+## GitConfigParser Class
 
 This class takes a directory path argument, which it uses as a target directory to search for a .git/config file. If a file is found, then the class will parse the URL from the config, and determines the git platform provider from the parsed URL path. This data is then used to return back an object instance with properties set to the parsed values.
 
 <br>
 
-#### GitConfigParser Object Arguments
+### GitConfigParser Object Arguments
+
+-----
 
 - `path`: The path of the project or where a valid .git/config file can be found
 - `verbose`: Enables verbose mode
@@ -50,7 +52,9 @@ This class takes a directory path argument, which it uses as a target directory 
 
 <br>
 
-#### GitConfigParser Object Properties
+### GitConfigParser Object Properties
+
+-----
 
 - `path`: The path that was used to instantiate the object
 - `verbose`: Verbose bool value that can be optionally passed to the class constructor
@@ -61,7 +65,9 @@ This class takes a directory path argument, which it uses as a target directory 
 
 <br><br>
 
-#### GitConfigParser Class Usage
+### GitConfigParser Class Usage
+
+-----
 
 ```python
 from cloudmage-gitutils import GitConfigParser
@@ -82,11 +88,9 @@ repo_user = Repo.user
 print(repo_user) # None
 ```
 
-<br>
+<br><br>
 
-__Optional Verbose Class Constructor Argument:__
-
-When instantiating the class an optional `verbose` argument can be provided. The argument expects a bool value of either `True` or `False`. By default verbose is set to False. If `verbose=True` is passed during object instantiation, then debug mode is turned on allowing the class to output DEBUG, INFO, and WARNING messages to stdout, and ERROR messages to stderr.
+> :spiral_notepad: &nbsp;[__Optional Verbose Class Constructor Argument:__](Note) <br> When instantiating the class an optional `verbose` argument can be provided. The argument expects a bool value of either `True` or `False`. By default verbose is set to False. If `verbose=True` is passed during object instantiation, then debug mode is turned on allowing the class to output DEBUG, INFO, and WARNING messages to stdout, and ERROR messages to stderr.
 
 <br>
 
@@ -111,11 +115,9 @@ print(repo_user) # None
 # Class DEBUG, INFO, and WARNING messages will be printed to stdout, and ERROR messages will be printed to stderr
 ```
 
-<br>
+<br><br>
 
-__Optional Log Object:__
-
-When instantiating the class an optional `log` argument can also be provided. The argument expects an Logger object to be passed as an input. If passed then all DEBUG, INFO, WARNING, and ERROR messages will be printed to the standard log levels (`log.debug()`, `log.info()`, `log.warning()`, `log.error()`) and printed to the passed respective logger object method.
+> :spiral_notepad: &nbsp;[__Optional Log Object:__](Note) <br> When instantiating the class an optional `log` argument can also be provided. The argument expects an Logger object to be passed as an input. If passed then all DEBUG, INFO, WARNING, and ERROR messages will be printed to the standard log levels (`log.debug()`, `log.info()`, `log.warning()`, `log.error()`) and printed to the passed respective logger object method.
 
 <br>
 
@@ -170,15 +172,15 @@ for items in GitLog.debug_logs:
 
 <br><br>
 
-### GitHubAPI
+## GitHubAPI
 
 This class takes a git repository URL as input, and then uses that input to construct and send a request to the github api for the targeted repository /repos endpoint. When a response is received and tested for validity, the JSON formatted response object is stored in the .data property, and used to populate the other class object properties listed below.
 
 <br>
 
-#### GitHubAPI Object Arguments
+### GitHubAPI Object Arguments
 
-repo_url, auth_token=None, verbose=False, log=None):
+-----
 
 - `repo_url`: The https or git formatted URL string of the target git repository
 - `auth_token`: Optional git provider authentication token to be set in the API request headers to authenticate the API request.
@@ -187,7 +189,9 @@ repo_url, auth_token=None, verbose=False, log=None):
 
 <br><br>
 
-#### GitHubAPI Object Properties
+### GitHubAPI Object Properties
+
+-----
 
 - `verbose`: Verbose bool value that can be optionally passed to the class constructor
 __Github Properties:__
@@ -230,7 +234,9 @@ __Github Properties:__
 
 <br><br>
 
-#### GitHubAPI Class Usage
+### GitHubAPI Class Usage
+
+-----
 
 ```python
 from cloudmage-gitutils import GitHubAPI
@@ -260,11 +266,11 @@ print(json.dumps, indent=4, sort_keys=True)
 }
 ```
 
+<br><br>
+
+> :spiral_notepad: &nbsp;[__Passing an Authentication Token:__](Note) <br> When instantiating the class, an option `auth_token` argument can be provided. The argument is a valid auth token issued from the platform provider. If provided, the auth_token will be passed to the request handler method, where the method will construct request headers including the authentication token for authenticated requests to private repositories.
+
 <br>
-
-__Passing an Authentication Token:__
-
-When instantiating the class, an option `auth_token` argument can be provided. The argument is a valid auth token issued from the platform provider. If provided, the auth_token will be passed to the request handler method, where the method will construct request headers including the authentication token for authenticated requests to private repositories.
 
 ```python
 from cloudmage-gitutils import GitHubAPI
@@ -294,11 +300,11 @@ print(json.dumps, indent=4, sort_keys=True)
 }
 ```
 
+<br><br>
+
+> :spiral_notepad: &nbsp;[__Optional Verbose Class Constructor Argument:__](Note) <br> When instantiating the class an optional `verbose` argument can be provided. The argument expects a bool value of either `True` or `False`. By default verbose is set to False. If `verbose=True` is passed during object instantiation, then debug mode is turned on allowing the class to output DEBUG, INFO, and WARNING messages to stdout, and ERROR messages to stderr.repositories.
+
 <br>
-
-__Optional Verbose Class Constructor Argument:__
-
-When instantiating the class an optional `verbose` argument can be provided. The argument expects a bool value of either `True` or `False`. By default verbose is set to False. If `verbose=True` is passed during object instantiation, then debug mode is turned on allowing the class to output DEBUG, INFO, and WARNING messages to stdout, and ERROR messages to stderr.
 
 ```python
 from cloudmage-gitutils import GitHubAPI
@@ -330,11 +336,11 @@ print(json.dumps, indent=4, sort_keys=True)
 # Class DEBUG, INFO, and WARNING messages will be printed to stdout, and ERROR messages will be printed to stderr
 ```
 
+<br><br>
+
+> :spiral_notepad: &nbsp;[__Optional Log Object:__](Note) <br> When instantiating the class an optional `log` argument can also be provided. The argument expects an Logger object to be passed as an input. If passed then all DEBUG, INFO, WARNING, and ERROR messages will be printed to the standard log levels (`log.debug()`, `log.info()`, `log.warning()`, `log.error()`) and printed to the passed respective logger object method.
+
 <br>
-
-__Optional Log Object:__
-
-When instantiating the class an optional `log` argument can also be provided. The argument expects an Logger object to be passed as an input. If passed then all DEBUG, INFO, WARNING, and ERROR messages will be printed to the standard log levels (`log.debug()`, `log.info()`, `log.warning()`, `log.error()`) and printed to the passed respective logger object method.
 
 ```python
 from cloudmage-gitutils import GitHubAPI
@@ -396,9 +402,9 @@ for items in GitLog.debug_logs:
 
 <br><br>
 
-## Contacts and Contributions
+## ![TheCloudMage](images/cloudmage-profile.png) &nbsp;&nbsp;Contacts and Contributions
 
-This project is owned and maintained by [@rnason](https://github.com/rnason)
+This project is owned and maintained by: [@rnason](https://github.com/rnason)
 
 <br>
 
