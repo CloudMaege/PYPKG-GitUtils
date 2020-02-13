@@ -6,6 +6,25 @@
 
 <br><br>
 
+## Table of Contents
+
+* [Description](#description)
+* [Road Map](#road-map)
+* [Python Version Support](#python-version-support)
+* [Package Dependencies](#package-dependencies)
+* [GitConfigParser Class](#gitconfigparser-class)
+  * [GitConfigParser Object Arguments](#gitconfigparser-object-arguments)
+  * [GitConfigParser Object Properties](#gitconfigparser-object-properties)
+  * [GitConfigParser Class Usage](#gitconfigparser-class-usage)
+* [GitHubAPI Class](#githubapi-class)
+  * [GitHubAPI Object Arguments](#githubapi-object-arguments)
+  * [GitHubAPI Object Properties](#githubapi-object-properties)
+  * [GitHubAPI Class Usage](#githubapi-class-usage)
+* [ChangeLog](#changelog)
+* [Contacts and Contributions](#contacts-and-contributions)
+
+<br><br>
+
 ## Description
 
 This utility package was created to allow quick and easy access to Git repository data for a provided repository. The purpose of this library is to be able to either automatically detect a projects configured Git repository by searching for and parsing a .git/config file in a given file path, or to take an input consisting simply of the repositories URL (HTTP | Git formatted) along with an optional access token. Once the repository has been determined by either means, the library will create and return an object instance consisting of the repository data received from the determined providers API parsed into the respective object properties.
@@ -18,7 +37,7 @@ Currently this library gathers data from the Githubs main repository API, howeve
 
 <br><br>
 
-## Python Version
+## Python Version Support
 
 This library is compatible with Python 3.6 and higher. It may work with earlier versions of Python3 but was not tested against anything earlier then 3.6. As Python 2.x is soon to be end of life, backward compatibility was not taken into consideration.
 
@@ -36,6 +55,23 @@ pip3 install cloudmage-gitutils
 
 <br><br>
 
+## Package Dependencies
+
+This package installs and imports the following python modules during installation:
+
+* requests
+
+<br>
+
+Additionally the package takes advantage of the following built in python modules:
+
+* os
+* sys
+* json
+* inspect
+
+<br><br>
+
 ## GitConfigParser Class
 
 This class takes a directory path argument, which it uses as a target directory to search for a .git/config file. If a file is found, then the class will parse the URL from the config, and determines the git platform provider from the parsed URL path. This data is then used to return back an object instance with properties set to the parsed values.
@@ -46,9 +82,17 @@ This class takes a directory path argument, which it uses as a target directory 
 
 -----
 
-- `path`: The path of the project or where a valid .git/config file can be found
-- `verbose`: Enables verbose mode
-- `log`: Redirects standard class log messages to a provided log object.
+* `path`: The path of the project or where a valid `.git/config` file can be found
+  * `type`: str (Must be valid directory path, checked with os.path.exists())
+  * `required`
+* `verbose`: Enables verbose mode
+  * `type`: bool
+  * `default`: False
+  * `optional`
+* `log`: Redirects standard class log messages to a provided log object.
+  * `type`: object
+  * `default`: None
+  * `optional`
 
 <br>
 
@@ -56,12 +100,12 @@ This class takes a directory path argument, which it uses as a target directory 
 
 -----
 
-- `path`: The path that was used to instantiate the object
-- `verbose`: Verbose bool value that can be optionally passed to the class constructor
-- `url`: The parsed URL value extracted from the discovered .git/config file
-- `provider`: The parsed provider (github, gitlab, or bitbucket currently supported) from the determined URL string
-- `user`: If a user was used in the config url, then the value of the configured user will be assigned to this property.
-- `log`: The class logger. It will either write directly to stdout, stderr, or to a lob object if one was passed into the object constructor.
+* `path`: The path that was used to instantiate the object
+* `verbose`: Verbose bool value that can be optionally passed to the class constructor
+* `url`: The parsed URL value extracted from the discovered .git/config file
+* `provider`: The parsed provider (github, gitlab, or bitbucket currently supported) from the determined URL string
+* `user`: If a user was used in the config url, then the value of the configured user will be assigned to this property.
+* `log`: The class logger. It will either write directly to stdout, stderr, or to a lob object if one was passed into the object constructor.
 
 <br><br>
 
@@ -172,7 +216,7 @@ for items in GitLog.debug_logs:
 
 <br><br>
 
-## GitHubAPI
+## GitHubAPI Class
 
 This class takes a git repository URL as input, and then uses that input to construct and send a request to the github api for the targeted repository /repos endpoint. When a response is received and tested for validity, the JSON formatted response object is stored in the .data property, and used to populate the other class object properties listed below.
 
@@ -182,55 +226,68 @@ This class takes a git repository URL as input, and then uses that input to cons
 
 -----
 
-- `repo_url`: The https or git formatted URL string of the target git repository
-- `auth_token`: Optional git provider authentication token to be set in the API request headers to authenticate the API request.
-- `verbose`: Optionally enable verbose class logging
-- `log`: Optionally provide log object as argument, and all class logging will be re-routed to the logger object.
+* `repo_url`: The https or git formatted URL string of the target git repository
+  * `type`: str
+  * `required`
+* `auth_token`: Optional git provider authentication token to be set in the API request headers to authenticate the API request.
+  * `type`: str
+  * `required`
+* `verbose`: Enables verbose mode
+  * `type`: bool
+  * `default`: False
+  * `optional`
+* `log`: Redirects standard class log messages to a provided log object.
+  * `type`: object
+  * `default`: None
+  * `optional`
 
-<br><br>
+<br>
 
 ### GitHubAPI Object Properties
 
 -----
 
-- `verbose`: Verbose bool value that can be optionally passed to the class constructor
-__Github Properties:__
-- `name`: The name of the targeted Git Repository (derived from provided URL string)
-- `namespace`: The namespace under which the repository is owned (derived from provided URL string)
-- `id`: The repositories Github id
-- `access`: Set to either `public` or `private` based on the github repository type
-- `http_url`: The HTTPS url of the repository
-- `git_url`: The GIT url of the repository
-- `mirror`: Repository configured mirror (If configured)
-- `description`: The repository description
-- `created`: The repository creation date
-- `updated`: The date the repository was last updated
-- `last_push`: The the date of the last push to the repository
-- `size`: The repository size
-- `language`: The repository language
-- `license`: The repository license
-- `archived`: True or False depending on if the repository has been archived
-- `disabled`: True or False depending on if the repository has been disabled
-- `default_branch`: The repositories default branch, typically `master`
-- `fork`: Indicator as to if the repository is a fork of another repository
-- `forks`: Number of forks from the repository
-- `watchers`: Number of repository watchers
-- `stars`: Number of stars on the repository
-- `issues`: Indicates if the repository has an issues section
-- `open_issues`: Number of open issues in the repositories
-- `homepage`: Value of repository homepage if configured
-- `wiki`: Indicates if the repository has a wiki
-- `pages`: Indicates if the repository has pages enabled
-- `downloads`: Indicates if the repository has downloads enabled
-- `projects`: Indicates if the repository has projects enabled.
-- `owner`: Object containing owner attributes
-  - `owner.id`: The github id of the repository owner
-  - `owner.name`: The name of the repository owner (github username)
-  - `owner.avatar`: The url of the repository owners avatar
-  - `owner.url`: The github url for the repository user profile
-- `state`: The state of the API request. Either `Success` or `Fail`
-- `data`: A dictionary containing the original github JSON response object
-- `log`: The class logger. It will either write directly to stdout, stderr, or to a lob object if one was passed into the object constructor.
+* `verbose`: Verbose bool value that can be optionally passed to the class constructor
+
+<br>
+
+__Github Response Properties:__
+* `name`: The name of the targeted Git Repository (derived from provided URL string)
+* `namespace`: The namespace under which the repository is owned (derived from provided URL string)
+* `id`: The repositories Github id
+* `access`: Set to either `public` or `private` based on the github repository type
+* `http_url`: The HTTPS url of the repository
+* `git_url`: The GIT url of the repository
+* `mirror`: Repository configured mirror (If configured)
+* `description`: The repository description
+* `created`: The repository creation date
+* `updated`: The date the repository was last updated
+* `last_push`: The the date of the last push to the repository
+* `size`: The repository size
+* `language`: The repository language
+* `license`: The repository license
+* `archived`: True or False depending on if the repository has been archived
+* `disabled`: True or False depending on if the repository has been disabled
+* `default_branch`: The repositories default branch, typically `master`
+* `fork`: Indicator as to if the repository is a fork of another repository
+* `forks`: Number of forks from the repository
+* `watchers`: Number of repository watchers
+* `stars`: Number of stars on the repository
+* `issues`: Indicates if the repository has an issues section
+* `open_issues`: Number of open issues in the repositories
+* `homepage`: Value of repository homepage if configured
+* `wiki`: Indicates if the repository has a wiki
+* `pages`: Indicates if the repository has pages enabled
+* `downloads`: Indicates if the repository has downloads enabled
+* `projects`: Indicates if the repository has projects enabled.
+* `owner`: Object containing owner attributes
+  * `owner.id`: The github id of the repository owner
+  * `owner.name`: The name of the repository owner (github username)
+  * `owner.avatar`: The url of the repository owners avatar
+  * `owner.url`: The github url for the repository user profile
+* `state`: The state of the API request. Either `Success` or `Fail`
+* `data`: A dictionary containing the original github JSON response object
+* `log`: The class logger. It will either write directly to stdout, stderr, or to a lob object if one was passed into the object constructor.
 
 <br><br>
 
@@ -402,6 +459,12 @@ for items in GitLog.debug_logs:
 
 <br><br>
 
+## Changelog
+
+To view the project changelog see: [ChangeLog:](CHANGELOG.md)
+
+<br><br>
+
 ## ![TheCloudMage](images/cloudmage-profile.png) &nbsp;&nbsp;Contacts and Contributions
 
 This project is owned and maintained by: [@rnason](https://github.com/rnason)
@@ -410,7 +473,7 @@ This project is owned and maintained by: [@rnason](https://github.com/rnason)
 
 To contribute, please:
 
-- Fork the project
-- Create a local branch
-- Submit Changes
-- Create A Pull Request
+* Fork the project
+* Create a local branch
+* Submit Changes
+* Create A Pull Request
