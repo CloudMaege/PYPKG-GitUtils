@@ -161,209 +161,41 @@ def test_init_verbose(capsys):
     # Test passed args
     assert(GitRepo.verbose == True)
 
-
-def test_url_github_http(capsys, create_git_config, destroy_git_config):
-    """This test will instantiate a new GitConfigParser object with a mock directory path and verbose=True to test the object instance.
-    Test each class property to ensure that the default instantiation values are correct.
-    Test the .verbose property to ensure that it has been enabled.
-    Test the local logger by parsing the log messages sent and verify that the url setter method fails due to improper file path, .git/config not found.
-    Create .git/config directory/file in the set path to test the url property setter method.
-    Test url getter method to ensure that a valid url is provided back.
-    Test provider setter passing the parsed URL string from the url getter/setter method
-    Test provider getter method to ensure that the provider is properly parsed from the provided URL string.
-    Test to ensure that the returned provider matchs 'github.com'
-    """
-    create_git_config(GithubHttpUrl)
+def test_url_from_gitters(capsys, create_git_config, destroy_git_config):
+    for providerUrl in [GithubHttpUrl, GithubGitUrl, GitlabHttpUrl, GitlabGitUrl, BitBucketHttpUrl, BitBucketGitUrl]:
+        create_git_config(providerUrl)
     
-    GitRepo = GitConfigParser(TestPath, verbose=True)
-    assert(isinstance(GitRepo, object))
+        GitRepo = GitConfigParser(TestPath, verbose=True)
+        assert(isinstance(GitRepo, object))
 
-    # Capture stdout, stderr to test log messages
-    out, err = capsys.readouterr()
-    sys.stdout.write(out)
-    sys.stderr.write(err)
-    # assert "INFO          CLS->GitConfigParser.url:   'URL' string match verified... Updating url property with value: {}".format(GithubHttpUrl) in out
-    # assert "INFO          CLS->GitConfigParser.provider:   Provider match {} found!".format('github.com') in out
+        # Test passed args
+        assert(GitRepo.verbose == True)
+        assert(GitRepo._url == providerUrl)
+        assert(GitRepo.url == providerUrl)
+        assert(GitRepo._provider is not None)
+        assert(GitRepo.provider is not None)
 
-    # Test passed args
-    assert(GitRepo.verbose == True)
-    assert(GitRepo._url == GithubHttpUrl)
-    assert(GitRepo.url == GithubHttpUrl)
-    assert(GitRepo._provider == 'github.com')
-    assert(GitRepo.provider == 'github.com')
-    assert(GitRepo.user == 'No user found in URL string.')
+        # Capture stdout, stderr to test log messages
+        out, err = capsys.readouterr()
+        sys.stdout.write(out)
+        sys.stderr.write(err)
 
-    destroy_git_config()
+        assert "INFO    CLS->GitConfigParser.url:   'URL' string match verified... Updating url property with value: {}".format(providerUrl) in out
+        assert "DEBUG   CLS->GitConfigParser.provider:   Provider match {} found!".format(GitRepo.provider) in out
+        
+        if GitRepo._provider == 'github.com' and GitRepo.provider == 'github.com':
+            assert(GitRepo.user == 'No user found in URL string.')
+        
+        if GitRepo._provider == 'gitlab.com' and GitRepo.provider == 'gitlab.com':
+            assert(GitRepo.user == 'No user found in URL string.')
+        
+        if GitRepo._provider == 'bitbucket.org' and GitRepo.provider == 'bitbucket.org':
+            if GitRepo.url.startswith('http'):
+                assert(GitRepo.user == 'mocuser')
+            else:
+                assert(GitRepo.user == 'No user found in URL string.')
 
-
-def test_url_github_git(capsys, create_git_config, destroy_git_config):
-    """This test will instantiate a new GitConfigParser object with a mock directory path and verbose=True to test the object instance.
-    Test each class property to ensure that the default instantiation values are correct.
-    Test the .verbose property to ensure that it has been enabled.
-    Test the local logger by parsing the log messages sent and verify that the url setter method fails due to improper file path, .git/config not found.
-    Create .git/config directory/file in the set path to test the url property setter method.
-    Test url getter method to ensure that a valid url is provided back.
-    Test provider setter passing the parsed URL string from the url getter/setter method
-    Test provider getter method to ensure that the provider is properly parsed from the provided URL string.
-    Test to ensure that the returned provider matchs 'github.com'
-    """
-    create_git_config(GithubGitUrl)
-    
-    GitRepo = GitConfigParser(TestPath, verbose=True)
-    assert(isinstance(GitRepo, object))
-
-    # Capture stdout, stderr to test log messages
-    out, err = capsys.readouterr()
-    sys.stdout.write(out)
-    sys.stderr.write(err)
-    assert "INFO    CLS->GitConfigParser.url:   'URL' string match verified... Updating url property with value: {}".format(GithubGitUrl) in out
-    assert "DEBUG   CLS->GitConfigParser.provider:   Provider match {} found!".format('github.com') in out
-
-    # Test passed args
-    assert(GitRepo.verbose == True)
-    assert(GitRepo._url == GithubGitUrl)
-    assert(GitRepo.url == GithubGitUrl)
-    assert(GitRepo._provider == 'github.com')
-    assert(GitRepo.provider == 'github.com')
-    assert(GitRepo.user == 'No user found in URL string.')
-
-    destroy_git_config()
-
-
-def test_url_gitlab_http(capsys, create_git_config, destroy_git_config):
-    """This test will instantiate a new GitConfigParser object with a mock directory path and verbose=True to test the object instance.
-    Test each class property to ensure that the default instantiation values are correct.
-    Test the .verbose property to ensure that it has been enabled.
-    Test the local logger by parsing the log messages sent and verify that the url setter method fails due to improper file path, .git/config not found.
-    Create .git/config directory/file in the set path to test the url property setter method.
-    Test url getter method to ensure that a valid url is provided back.
-    Test provider setter passing the parsed URL string from the url getter/setter method
-    Test provider getter method to ensure that the provider is properly parsed from the provided URL string.
-    Test to ensure that the returned provider matchs 'gitlab.com'
-    """
-    create_git_config(GitlabHttpUrl)
-    
-    GitRepo = GitConfigParser(TestPath, verbose=True)
-    assert(isinstance(GitRepo, object))
-
-    # Capture stdout, stderr to test log messages
-    out, err = capsys.readouterr()
-    sys.stdout.write(out)
-    sys.stderr.write(err)
-    assert "INFO    CLS->GitConfigParser.url:   'URL' string match verified... Updating url property with value: {}".format(GitlabHttpUrl) in out
-    assert "DEBUG   CLS->GitConfigParser.provider:   Provider match {} found!".format('gitlab.com') in out
-
-    # Test passed args
-    assert(GitRepo.verbose == True)
-    assert(GitRepo._url == GitlabHttpUrl)
-    assert(GitRepo.url == GitlabHttpUrl)
-    assert(GitRepo._provider == 'gitlab.com')
-    assert(GitRepo.provider == 'gitlab.com')
-    assert(GitRepo.user == 'No user found in URL string.')
-
-    destroy_git_config()
-
-
-def test_url_gitlab_git(capsys, create_git_config, destroy_git_config):
-    """This test will instantiate a new GitConfigParser object with a mock directory path and verbose=True to test the object instance.
-    Test each class property to ensure that the default instantiation values are correct.
-    Test the .verbose property to ensure that it has been enabled.
-    Test the local logger by parsing the log messages sent and verify that the url setter method fails due to improper file path, .git/config not found.
-    Create .git/config directory/file in the set path to test the url property setter method.
-    Test url getter method to ensure that a valid url is provided back.
-    Test provider setter passing the parsed URL string from the url getter/setter method
-    Test provider getter method to ensure that the provider is properly parsed from the provided URL string.
-    Test to ensure that the returned provider matchs 'gitlab.com'
-    """
-    create_git_config(GitlabGitUrl)
-
-    GitRepo = GitConfigParser(TestPath, verbose=True)
-    assert(isinstance(GitRepo, object))
-
-    # Capture stdout, stderr to test log messages
-    out, err = capsys.readouterr()
-    sys.stdout.write(out)
-    sys.stderr.write(err)
-    assert "INFO    CLS->GitConfigParser.url:   'URL' string match verified... Updating url property with value: {}".format(GitlabGitUrl) in out
-    assert "DEBUG   CLS->GitConfigParser.provider:   Provider match {} found!".format('gitlab.com') in out
-
-    # Test passed args
-    assert(GitRepo.verbose == True)
-    assert(GitRepo._url == GitlabGitUrl)
-    assert(GitRepo.url == GitlabGitUrl)
-    assert(GitRepo._provider == 'gitlab.com')
-    assert(GitRepo.provider == 'gitlab.com')
-    assert(GitRepo.user == 'No user found in URL string.')
-
-    destroy_git_config()
-
-
-def test_url_bitbucket_http(capsys, create_git_config, destroy_git_config):
-    """This test will instantiate a new GitConfigParser object with a mock directory path and verbose=True to test the object instance.
-    Test each class property to ensure that the default instantiation values are correct.
-    Test the .verbose property to ensure that it has been enabled.
-    Test the local logger by parsing the log messages sent and verify that the url setter method fails due to improper file path, .git/config not found.
-    Create .git/config directory/file in the set path to test the url property setter method.
-    Test url getter method to ensure that a valid url is provided back.
-    Test provider setter passing the parsed URL string from the url getter/setter method
-    Test provider getter method to ensure that the provider is properly parsed from the provided URL string.
-    Test to ensure that the returned provider matchs 'bitbucket.org'
-    """
-    create_git_config(BitBucketHttpUrl)
-
-    GitRepo = GitConfigParser(TestPath, verbose=True)
-    assert(isinstance(GitRepo, object))
-
-    # Capture stdout, stderr to test log messages
-    out, err = capsys.readouterr()
-    sys.stdout.write(out)
-    sys.stderr.write(err)
-    assert "INFO    CLS->GitConfigParser.url:   'URL' string match verified... Updating url property with value: {}".format(BitBucketHttpUrl) in out
-    assert "DEBUG   CLS->GitConfigParser.provider:   Provider match {} found!".format('bitbucket.org') in out
-
-    # Test passed args
-    assert(GitRepo.verbose == True)
-    assert(GitRepo._url == BitBucketHttpUrl)
-    assert(GitRepo.url == BitBucketHttpUrl)
-    assert(GitRepo._provider == 'bitbucket.org')
-    assert(GitRepo.provider == 'bitbucket.org')
-    assert(GitRepo.user == 'mocuser')
-
-    destroy_git_config()
-
-
-def test_url_bitbucket_git(capsys, create_git_config, destroy_git_config):
-    """This test will instantiate a new GitConfigParser object with a mock directory path and verbose=True to test the object instance.
-    Test each class property to ensure that the default instantiation values are correct.
-    Test the .verbose property to ensure that it has been enabled.
-    Test the local logger by parsing the log messages sent and verify that the url setter method fails due to improper file path, .git/config not found.
-    Create .git/config directory/file in the set path to test the url property setter method.
-    Test url getter method to ensure that a valid url is provided back.
-    Test provider setter passing the parsed URL string from the url getter/setter method
-    Test provider getter method to ensure that the provider is properly parsed from the provided URL string.
-    Test to ensure that the returned provider matchs 'bitbucket.org'
-    """
-    create_git_config(BitBucketGitUrl)
-    
-    GitRepo = GitConfigParser(TestPath, verbose=True)
-    assert(isinstance(GitRepo, object))
-
-    # Capture stdout, stderr to test log messages
-    out, err = capsys.readouterr()
-    sys.stdout.write(out)
-    sys.stderr.write(err)
-    assert "INFO    CLS->GitConfigParser.url:   'URL' string match verified... Updating url property with value: {}".format(BitBucketGitUrl) in out
-    assert "DEBUG   CLS->GitConfigParser.provider:   Provider match {} found!".format('bitbucket.org') in out
-
-    # Test passed args
-    assert(GitRepo.verbose == True)
-    assert(GitRepo._url == BitBucketGitUrl)
-    assert(GitRepo.url == BitBucketGitUrl)
-    assert(GitRepo._provider == 'bitbucket.org')
-    assert(GitRepo.provider == 'bitbucket.org')
-    assert(GitRepo.user == 'No user found in URL string.')
-
-    destroy_git_config()
+        destroy_git_config()
 
 
 def test_log():
