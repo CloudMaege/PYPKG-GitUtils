@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "CloudMage-GitUtils"
-version = "0.0.3"
+version = "0.0.4"
 description = "Quickly and easily create usable Git repository objects from major Git platform providers automatically or by simply providing the repository URL."
 license = "GPL-3.0-or-later"
 authors = ["Rich Nason <rnason@cloudmage.io>"]
