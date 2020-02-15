@@ -98,6 +98,7 @@ class GitConfigParser(object):
         """
 
         ##### Class Private Attributes #####
+        # TODO: Need to test if path is valid before assignment
         self._path = path
         self._verbose = verbose
         self._log = log
@@ -109,6 +110,8 @@ class GitConfigParser(object):
         ##### Class Private Properties #####        
         self._url = None
         self._provider = None
+        self.url = None
+        self.provider = None
 
         ##### Class Public Properties #####
         # Execute Property Setters
@@ -158,7 +161,7 @@ class GitConfigParser(object):
             Log Stream
         """
         # Define this methods identity for functional logging:
-        self.__id = inspect.stack()[0][3]
+        self.__log_id = inspect.stack()[0][3]
         try:
             # Internal method variable assignments:
             log_msg_caller = "{}.{}".format(self._log_context, log_id)
@@ -189,7 +192,7 @@ class GitConfigParser(object):
                     if self._verbose:
                         print(log_message, file=sys.stdout)
         except Exception as e:
-            self._exception_handler(self.__id, e)
+            self._exception_handler(self.__log_id, e)
 
 
     ################################################
@@ -209,7 +212,7 @@ class GitConfigParser(object):
         """Setter method for the verbose property. This method will set the verbose setting if a valid bool value is provided."""
         # Define this methods identity for functional logging:
         self.__id = inspect.stack()[0][3]
-        self.log("{} property update requested.", 'info', self.__id)
+        self.log("{} property update requested.".format(self.__id), 'info', self.__id)
         try:
             if verbose is not None and isinstance(verbose, bool):
                 self._verbose = verbose
@@ -245,7 +248,7 @@ class GitConfigParser(object):
         """Setter method for the object url property. This property will search the provided path and attempt to extact the a git repository URL if a .git/config file can be found in the provided path."""
         # Define this methods identity for functional logging:
         self.__id = inspect.stack()[0][3]
-        self.log("{} property update requested.", 'info', self.__id)
+        self.log("{} property update requested.".format(self.__id), 'info', self.__id)
         try:
             # Ensure that a valid value was passed.
             if config_path is not None and isinstance(config_path, str):
@@ -309,7 +312,7 @@ class GitConfigParser(object):
         """Setter method for the object provider property. This property will search the provided url and attempt to extact the a git repository provider, such as github, gitlab, or bitbucket."""
         # Define this methods identity for functional logging:
         self.__id = inspect.stack()[0][3]
-        self.log("{} property update requested.", 'info', self.__id)
+        self.log("{} property update requested.".format(self.__id), 'info', self.__id)
         try:
             if repository_url is not None and isinstance(repository_url, str):
                 self.log("Searching for git provider in URL: {}".format(repository_url), 'debug', self.__id)

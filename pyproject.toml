@@ -19,6 +19,8 @@ requests = "^2.22.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^4.6"
+pylint = "^2.4.4"
+coverage = "^5.0.3"
 
 [tool.poetry.scripts]
 GitConfigParser = 'gitutils.gitconfig_parser'
