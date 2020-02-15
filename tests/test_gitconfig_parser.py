@@ -4,7 +4,38 @@
 # Imports:     #
 ################
 from gitutils import GitConfigParser
-import pytest, os, sys, shutil
+import pytest, os, sys, shutil, inspect
+
+class BadLog(object):
+    """Something other than a logger"""
+    def __init__(self):
+        self.answer = 42
+    
+    def divide_answer(self):
+        return self.answer / 2
+
+
+class Log(object):
+    """Test Log Object"""
+
+    def __init__(self):
+      self.msg = None
+
+    def debug(self, message):
+        """Log Debug Messages"""
+        print('DEBUG   ' + message, file=sys.stdout)
+
+    def info(self, message):
+        """Log Debug Messages"""
+        print('INFO    ' + message, file=sys.stdout)
+
+    def warning(self, message):
+        """Log Warning Messages"""
+        print('WARNING ' + message, file=sys.stdout)
+
+    def error(self, message):
+        """Log Debug Messages"""
+        print('ERROR  ' + message, file=sys.stderr)
 
 # GitHub Style URLs
 GithubHttpUrl = "https://github.com/TheCloudMage/Mock-Repository.git"
@@ -29,8 +60,8 @@ def setup():
     """ setup any state specific to the execution of the given class (which
     usually contains tests).
     """
-    if os.path.exists(TestPath):
-      shutil.rmtree(TestPath)
+    # if os.path.exists(TestPath):
+    #   shutil.rmtree(TestPath)
 
     os.mkdir(TestPath)
     yield
@@ -344,29 +375,6 @@ def test_log():
     The Log object will push each Class log event to a Log object list property. Check the DEBUG, INFO, and ERROR lists to ensure they are not empty
     Test the last element of each of the DEBUG, INFO, and ERROR log object list properties for the expected log messages from the GitConfigParser object instantiation.
     """
-
-    class Log(object):
-        """Test Log Object"""
-
-        def __init__(self):
-            """Class Constructor"""
-            self.debug_logs = []
-            self.info_logs = []
-            self.error_logs = []
-
-        def debug(self, message):
-            """Log Debug Messages"""
-            self.debug_logs.append(message)
-
-        def info(self, message):
-            """Log Debug Messages"""
-            self.info_logs.append(message)
-
-        def error(self, message):
-            """Log Debug Messages"""
-            self.error_logs.append(message)
-
-
     # Instantiate a log object
     GitLog = Log()
 
@@ -413,21 +421,121 @@ def test_log():
     assert(isinstance(GitRepo._log, object))
     assert(hasattr(GitRepo._log, 'debug'))
     assert(hasattr(GitRepo._log, 'info'))
+    assert(hasattr(GitRepo._log, 'warning'))
     assert(hasattr(GitRepo._log, 'error'))
-    assert(hasattr(GitRepo._log, 'debug_logs'))
-    assert(hasattr(GitRepo._log, 'info_logs'))
-    assert(hasattr(GitRepo._log, 'error_logs'))
 
-    # Test the Log object debug_logs, info_logs, and error_logs properties are lists
-    assert(isinstance(GitRepo._log.debug_logs, list))
-    assert(isinstance(GitRepo._log.info_logs, list))
-    assert(isinstance(GitRepo._log.error_logs, list))
+# Negative Tests (expected failuers).
+def test_fails_and_coverage(capsys, create_git_config, destroy_git_config):
+    GitRepo = GitConfigParser(TestPath)
+    GitRepo.verbose = True
 
-    # Test the GitHubLog object to ensure that the lists are not empty (The GitHubAPI flow should add records to each one.)
-    assert(len(GitLog.debug_logs) > 0)
-    assert(len(GitLog.info_logs) > 0)
-    assert(len(GitLog.error_logs) == 2)
+    # Capture stdout, stderr to test log messages
+    out, err = capsys.readouterr()
+    sys.stdout.write(out)
+    sys.stderr.write(err)
+    
+    assert 'INFO    CLS->GitConfigParser.verbose:   Updated verbose property with value: True' in out
+    
+    with pytest.raises(TypeError):
+      GitRepo.log('This is a message', 'info')
+    
+    with pytest.raises(TypeError):
+      GitRepo.log('This is a message')
+    
+    with pytest.raises(TypeError):
+      GitRepo.log()
 
-    # Test the Log object for the expected output messages from the GitHubAPI instance instantiation by testing the expected value of the last item in each of the lists.
-    assert(GitLog.debug_logs[-1] == "CLS->GitConfigParser.provider:   Return: bitbucket.org")
-    assert(GitLog.info_logs[-1] == "CLS->GitConfigParser.provider:   provider property requested.")
+    GitRepo.log('This is a message for warning purposes.', 'warning', 'TESTS')
+
+    # Capture stdout, stderr to test log messages
+    out, err = capsys.readouterr()
+    sys.stdout.write(out)
+    sys.stderr.write(err)
+
+    assert 'WARNING CLS->GitConfigParser.TESTS:   This is a message for warning purposes.' in out
+
+    GitRepo.log('Message', 42, 2)
+    # Capture stdout, stderr to test log messages
+    out, err = capsys.readouterr()
+    sys.stdout.write(out)
+    sys.stderr.write(err)
+
+    assert "ERROR   CLS->GitConfigParser.log:   An EXCEPTION has occurred in 'CLS->GitConfigParser.log', on line 182: -> 'int' object has no attribute 'lower'" in err
+
+    GitRepo.verbose = 42
+    
+    out, err = capsys.readouterr()
+    sys.stdout.write(out)
+    sys.stderr.write(err)
+    
+    assert "ERROR   CLS->GitConfigParser.verbose:   Property verbose argument expected bool but received type: <class 'int'>. Aborting update!" in err
+
+    BadProtocolBitbucket = "meh://mocuser@bitbucket.org/TheCloudMage/Mock-Repository.git"
+
+    create_git_config(BadProtocolBitbucket)
+
+    GitRepo = GitConfigParser(TestPath, verbose=True)
+
+    GitRepo.url = ConfigPath
+
+    out, err = capsys.readouterr()
+    sys.stdout.write(out)
+    sys.stderr.write(err)
+
+    destroy_git_config()
+    
+    assert "WARNING CLS->GitConfigParser.url:   'URL' match failed format verification on match string: meh://mocuser@bitbucket.org/TheCloudMage/Mock-Repository.git" in out
+
+    GitRepo = GitConfigParser(TestPath, verbose=True)
+    GitRepo.url = './meheheheh'
+
+    out, err = capsys.readouterr()
+    sys.stdout.write(out)
+    sys.stderr.write(err)
+
+    assert "ERROR   CLS->GitConfigParser.url:   Provided directory path does not exist. Aborting property update!" in err
+
+    GitRepo.url = 42
+
+    out, err = capsys.readouterr()
+    sys.stdout.write(out)
+    sys.stderr.write(err)
+
+    assert "ERROR   CLS->GitConfigParser.url:   Valid url path argument expected string but received type: <class 'int'>" in err
+
+    GitRepo.provider = BadProtocolBitbucket
+
+    out, err = capsys.readouterr()
+    sys.stdout.write(out)
+    sys.stderr.write(err)
+
+    assert "ERROR   CLS->GitConfigParser.provider:   URL meh://mocuser@bitbucket.org/TheCloudMage/Mock-Repository.git not properly formatted, aborting provider searc" in err
+
+    GitRepo.provider = 'https:github.com/42.lower()/Mock-Repository.git'
+
+    out, err = capsys.readouterr()
+    sys.stdout.write(out)
+    sys.stderr.write(err)
+
+    assert "ERROR   CLS->GitConfigParser.provider:   Parsed provider value: None not found or invalid. Aborting provider search!" in err
+
+    GitLog = Log()
+    GitRepo = GitConfigParser(TestPath, True, GitLog)
+
+    assert(GitRepo.verbose is True)
+    assert(GitRepo._log is not None)
+    
+    GitRepo.log('WARNING WARNING WARNING', 'warning', 'rich-was-here')
+    
+    out, err = capsys.readouterr()
+    sys.stdout.write(out)
+    sys.stderr.write(err)
+
+    assert "WARNING CLS->GitConfigParser.rich-was-here:   WARNING WARNING WARNING" in out
+
+    GitLog = BadLog()
+    GitRepo = GitConfigParser(TestPath, True, GitLog)
+
+    assert(GitRepo.verbose is True)
+    assert(GitRepo._log is None)
+

@@ -101,7 +101,7 @@ class GitConfigParser(object):
         # TODO: Need to test if path is valid before assignment
         self._path = path
         self._verbose = verbose
-        self._log = log
+ 
         self._log_context = "CLS->GitConfigParser"
 
         ##### Class Public Attributes #####
@@ -110,6 +110,19 @@ class GitConfigParser(object):
         ##### Class Private Properties #####        
         self._url = None
         self._provider = None
+        self._log = None
+
+        # Make sure the log argument is a logger of some sort.
+        if log is not None:
+          if isinstance(log, object):
+            log_OK = True
+            for method in ["debug", "info", "warning", "error"]:
+                op = getattr(log, method, None)
+                if not callable(op):
+                  log_OK = False
+            if log_OK:
+              self._log = log
+
         self.url = None
         self.provider = None
 
@@ -142,7 +155,6 @@ class GitConfigParser(object):
             )
         self.log(parse_exc_msg, 'error', caller_function)
 
-
     ############################################
     # Class Logger:                            #
     ############################################
@@ -171,6 +183,7 @@ class GitConfigParser(object):
             log_msg_offset = 1 if log_type.lower() == 'warning' else log_msg_offset
 
             # If a valid log object was passed into the class constructor, publish the log to the log object:
+            # TODO: Verify this is a logger of some sort...
             if self._log is not None:
                 # Set the log message prefix
                 log_message = "{}:   {}".format(log_msg_caller, log_msg)
@@ -213,14 +226,12 @@ class GitConfigParser(object):
         # Define this methods identity for functional logging:
         self.__id = inspect.stack()[0][3]
         self.log("{} property update requested.".format(self.__id), 'info', self.__id)
-        try:
-            if verbose is not None and isinstance(verbose, bool):
-                self._verbose = verbose
-                self.log("Updated {} property with value: {}".format(self._url, self._verbose), 'info', self.__id)
-            else:
-                self.log("Property {} verbose argument expected bool but received type: {}. Aborting update!".format(self._url, type(verbose)), 'error', self.__id)
-        except Exception as e:
-            self._exception_handler(self.__id, e)
+        
+        if verbose is not None and isinstance(verbose, bool):
+            self._verbose = verbose
+            self.log("Updated {} property with value: {}".format(self.__id, self._verbose), 'info', self.__id)
+        else:
+            self.log("Property {} argument expected bool but received type: {}. Aborting update!".format(self.__id, type(verbose)), 'error', self.__id)
 
 
     ################################################
@@ -232,15 +243,13 @@ class GitConfigParser(object):
         # Define this methods identity for functional logging:
         self.__id = inspect.stack()[0][3]
         self.log("{} property requested.".format(self.__id), 'info', self.__id)
-        try:
-            if self._url is not None:
-                self.log("Return: {}".format(self._url), 'debug', self.__id)
-                return self._url
-            else:
-                self.log("Return: {} has no value assigned!".format(self.__id), 'warning', self.__id)
-                return "{} property has no value assigned!".format(self.__id)
-        except Exception as e:
-            self._exception_handler(self.__id, e)
+        
+        if self._url is not None:
+            self.log("Return: {}".format(self._url), 'debug', self.__id)
+            return self._url
+        else:
+            self.log("Return: {} has no value assigned!".format(self.__id), 'warning', self.__id)
+            return "{} property has no value assigned!".format(self.__id)
 
 
     @url.setter
@@ -249,42 +258,38 @@ class GitConfigParser(object):
         # Define this methods identity for functional logging:
         self.__id = inspect.stack()[0][3]
         self.log("{} property update requested.".format(self.__id), 'info', self.__id)
-        try:
-            # Ensure that a valid value was passed.
-            if config_path is not None and isinstance(config_path, str):
-                # Search for a .git directory in the provided search path, and if found parse to get the repository URL.
-                git_config_path = os.path.join(config_path, '.git/config')
-                self.log("Searching for git config in path: {}".format(git_config_path), 'debug', self.__id)
-                # If the provided path exists, then attempt to extract the url from the .git/config file.
-                if os.path.exists(git_config_path):
-                    self.log(".git/config file found in search path. Searching for repository url...", 'debug', self.__id)
-                    try:
-                        with open(git_config_path) as f:
-                            for count, line in enumerate(f):
-                                # For each line in the config, if url is found in the line, then attempt to parse it.
-                                if 'url' in line:
-                                    self.log("'URL' string match found in .git/config line: {}".format(line), 'debug', self.__id)
-                                    k, v = line.partition("=")[::2]
-                                    git_config_url = v.strip()
-                                    self.log("Parsing 'URL' string match: {}".format(git_config_url), 'debug', self.__id)
-                                    # If the found URL string starts and ends with proper criteria, assign the value and break.
-                                    if git_config_url.startswith(('http', 'https', 'git', 'ssh')) and git_config_url.endswith('.git'):
-                                        self._url = git_config_url
-                                        self.log("'URL' string match verified... Updating url property with value: {}".format(self._url), 'info', self.__id)
-                                        break
-                                    else:
-                                        self.log("'URL' match failed format verification on match string: {}".format(git_config_url), 'warning', self.__id)
-                                        continue
-                                else:
-                                    self.log("'URL' match not found in line: {}".format(line), 'debug', self.__id)
-                    except Exception as e:
-                        self._exception_handler(self.__id, e)
-                else:
-                    self.log("Provided directory path does not exist. Aborting property update!", 'error', self.__id)
+        
+        # Ensure that a valid value was passed.
+        if config_path is not None and isinstance(config_path, str):
+            # Search for a .git directory in the provided search path, and if found parse to get the repository URL.
+            git_config_path = os.path.join(config_path, '.git/config')
+            self.log("Searching for git config in path: {}".format(git_config_path), 'debug', self.__id)
+            # If the provided path exists, then attempt to extract the url from the .git/config file.
+            if os.path.exists(git_config_path) and os.access(git_config_path, os.R_OK):
+                self.log(".git/config file found in search path. Searching for repository url...", 'debug', self.__id)
+                
+                with open(git_config_path) as f:
+                    for count, line in enumerate(f):
+                        # For each line in the config, if url is found in the line, then attempt to parse it.
+                        if 'url' in line:
+                            self.log("'URL' string match found in .git/config line: {}".format(line), 'debug', self.__id)
+                            k, v = line.partition("=")[::2]
+                            git_config_url = v.strip()
+                            self.log("Parsing 'URL' string match: {}".format(git_config_url), 'debug', self.__id)
+                            # If the found URL string starts and ends with proper criteria, assign the value and break.
+                            if git_config_url.startswith(('http', 'https', 'git', 'ssh')) and git_config_url.endswith('.git'):
+                                self._url = git_config_url
+                                self.log("'URL' string match verified... Updating url property with value: {}".format(self._url), 'info', self.__id)
+                                break
+                            else:
+                                self.log("'URL' match failed format verification on match string: {}".format(git_config_url), 'warning', self.__id)
+                                continue
+                        else:
+                            self.log("'URL' match not found in line: {}".format(line), 'debug', self.__id)
             else:
-                self.log("Valid {} path argument expected string but received type: {}".format(self.__id, type(config_path)), 'error', self.__id)
-        except Exception as e:
-            self._exception_handler(self.__id, e)
+                self.log("Provided directory path does not exist. Aborting property update!", 'error', self.__id)
+        else:
+            self.log("Valid {} path argument expected string but received type: {}".format(self.__id, type(config_path)), 'error', self.__id)
 
 
     ################################################
@@ -296,15 +301,13 @@ class GitConfigParser(object):
         # Define this methods identity for functional logging:
         self.__id = inspect.stack()[0][3]
         self.log("{} property requested.".format(self.__id), 'info', self.__id)
-        try:
-            if self._provider is not None:
-                self.log("Return: {}".format(self._provider), 'debug', self.__id)
-                return self._provider
-            else:
-                self.log("Return: {} has no value assigned!".format(self.__id), 'warning', self.__id)
-                return "{} property has no value assigned!".format(self.__id)
-        except Exception as e:
-            self._exception_handler(self.__id, e)
+        
+        if self._provider is not None:
+            self.log("Return: {}".format(self._provider), 'debug', self.__id)
+            return self._provider
+        else:
+            self.log("Return: {} has no value assigned!".format(self.__id), 'warning', self.__id)
+            return "{} property has no value assigned!".format(self.__id)
 
 
     @provider.setter
@@ -313,38 +316,36 @@ class GitConfigParser(object):
         # Define this methods identity for functional logging:
         self.__id = inspect.stack()[0][3]
         self.log("{} property update requested.".format(self.__id), 'info', self.__id)
-        try:
-            if repository_url is not None and isinstance(repository_url, str):
-                self.log("Searching for git provider in URL: {}".format(repository_url), 'debug', self.__id)
-                # Parse the provided repository url and attempt to extract the provider.
-                if repository_url.startswith(('http', 'https', 'git', 'ssh')) and repository_url.endswith('.git'):
-                    provider_git_url = repository_url.strip().split("/")
-                    self.log("URL format validated, splitting into search list: {}".format(provider_git_url), 'debug', self.__id)
-                    if len(provider_git_url) == 2:
-                        provider_string = provider_git_url[-2].split(":")[0].split("@")[1]
-                    elif len(provider_git_url) > 3:
-                        provider_string = provider_git_url[-3]
-                    else:
-                        provider_string = None
-
-                    # Validate the provider string is an expected value if one was parsed.
-                    if provider_string is not None and ('github' in provider_string or 'gitlab' in provider_string or 'bitbucket' in provider_string):
-                        # If a user@provider.tld is set, then parse the user designation and set the class user attribute.
-                        if '@' in provider_string:
-                            self.user = provider_string.split('@')[0]
-                            self.log("User detected in provider string, updating user attribute: {}".format(self.user), 'debug', self.__id)
-                            provider_string = provider_string.split('@')[1]
-                        else:
-                            self.user = "No user found in URL string."
-                            self.log("No User detected in provider string, updating user attribute: {}".format(self.user), 'debug', self.__id)
-                        # Now the provider string should be the target provider, set the internal class attribute.
-                        self._provider = provider_string
-                        self.log("Provider match {} found!".format(self._provider), 'debug', self.__id)
-                    else:
-                        self.log("Parsed provider value: {} not found or invalid. Aborting provider search!".format(provider_string), 'error', self.__id)
+        
+        if repository_url is not None and isinstance(repository_url, str):
+            self.log("Searching for git provider in URL: {}".format(repository_url), 'debug', self.__id)
+            # Parse the provided repository url and attempt to extract the provider.
+            if repository_url.startswith(('http', 'https', 'git', 'ssh')) and repository_url.endswith('.git'):
+                provider_git_url = repository_url.strip().split("/")
+                self.log("URL format validated, splitting into search list: {}".format(provider_git_url), 'debug', self.__id)
+                if len(provider_git_url) == 2:
+                    provider_string = provider_git_url[-2].split(":")[0].split("@")[1]
+                elif len(provider_git_url) > 3:
+                    provider_string = provider_git_url[-3]
                 else:
-                    self.log("URL {} not properly formatted, aborting provider search...".format(repository_url), 'error', self.__id)
+                    provider_string = None
+
+                # Validate the provider string is an expected value if one was parsed.
+                if provider_string is not None and ('github' in provider_string or 'gitlab' in provider_string or 'bitbucket' in provider_string):
+                    # If a user@provider.tld is set, then parse the user designation and set the class user attribute.
+                    if '@' in provider_string:
+                        self.user = provider_string.split('@')[0]
+                        self.log("User detected in provider string, updating user attribute: {}".format(self.user), 'debug', self.__id)
+                        provider_string = provider_string.split('@')[1]
+                    else:
+                        self.user = "No user found in URL string."
+                        self.log("No User detected in provider string, updating user attribute: {}".format(self.user), 'debug', self.__id)
+                    # Now the provider string should be the target provider, set the internal class attribute.
+                    self._provider = provider_string
+                    self.log("Provider match {} found!".format(self._provider), 'debug', self.__id)
+                else:
+                    self.log("Parsed provider value: {} not found or invalid. Aborting provider search!".format(provider_string), 'error', self.__id)
             else:
-                self.log("Valid {} repository url argument expected string but received type: {}".format(self.__id, type(repository_url)), 'error', self.__id)
-        except Exception as e:
-            self._exception_handler(self.__id, e)
+                self.log("URL {} not properly formatted, aborting provider search...".format(repository_url), 'error', self.__id)
+        else:
+            self.log("Valid {} repository url argument expected string but received type: {}".format(self.__id, type(repository_url)), 'error', self.__id)
