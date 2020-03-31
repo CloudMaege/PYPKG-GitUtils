@@ -11,10 +11,12 @@
 * [Description](#description)
 * [Road Map](#road-map)
 * [Python Version Support](#python-version-support)
+* [Package Installation](#package-installation)
 * [Package Dependencies](#package-dependencies)
 * [GitConfigParser Class](#gitconfigparser-class)
-  * [GitConfigParser Object Arguments](#gitconfigparser-object-arguments)
-  * [GitConfigParser Object Properties](#gitconfigparser-object-properties)
+  * [GitConfigParser Constructor Arguments](#gitconfigparser-constructor-arguments)
+  * [GitConfigParser Attributes and Properties](#gitconfigparser-attributes-and-properties)
+  * [GitConfigParser Available Methods](#gitconfigparser-available-methods)
   * [GitConfigParser Class Usage](#gitconfigparser-class-usage)
 * [GitHubAPI Class](#githubapi-class)
   * [GitHubAPI Object Arguments](#githubapi-object-arguments)
@@ -78,7 +80,7 @@ This class takes a directory path argument, which it uses as a target directory 
 
 <br>
 
-### Constructor Arguments
+### GitConfigParser Constructor Arguments
 
 -----
 
@@ -86,54 +88,78 @@ The following arguments can be used to instantiate a new object instance:
 
 <br>
 
-* __path__: &nbsp; A valid directory path where a `.git/config` file can be found. Must be valid directory path, checked with `os.path.exists()`
-  * *type*: &nbsp; [str](str)
-  * *required*: &nbsp; [true](true)
-* __verbose__: &nbsp; Enables verbose mode. *True=Enable, False=Disable*
-  * *type*: &nbsp; [bool](bool)
-  * *required*: &nbsp; [false](false)
-  * *default*: &nbsp; [false](false)
-* __log__: &nbsp; Redirects object standard log messaging to provided log object.
-  * *type*: &nbsp; [obj](obj)
-  * *required*: &nbsp; [false](false)
-  * *default*: &nbsp; [None](None)
-
-
-TRY TABLE
-
+| __[path]('')__ |  *A valid directory path where a `.git/config` file can be found. <br> Must be valid directory path, checked with `os.path.exists()`* |
+|:---------------|:-------------------------------------------------------|
+| *required*     | [true]('')                                             |
+| *type*         | [str](https://docs.python.org/3/library/stdtypes.html) |
 
 <br>
 
-### Available Attributes and Properties
+| __[verbose]('')__ |  *Enables verbose mode. &nbsp; [[true]('')=enable &nbsp; [false]('')=disable]* |
+|:------------------|:--------------------------------------------------------|
+| *required*        | [false]('')                                             |
+| *type*            | [bool](https://docs.python.org/3/library/stdtypes.html) |
+| *default*         | [false]('') *(disabled)*                                |
+
+<br>
+
+| __[log]('')__ |  *Redirects object standard log messaging to provided log object.* |
+|:--------------|:-----------------------------------------------------------|
+| *required*    | [false]('')                                                |
+| *type*        | [obj](https://docs.python.org/3/library/stdtypes.html)     |
+| *default*     | [None]('') *(log to stdout, stderr if verbose=[true](''))* |
+
+<br><br>
+
+### GitConfigParser Attributes and Properties
 
 -----
 
 The following attributes/properties are available to an instantiated object instance. Any of the attributes or properties can be accessed with standard object dot notation as in the example: `verbose_mode = GitConfigParserObj.verbose`
 
-* __verbose__: &nbsp; Verbose setting that controls logging level within the object. True=Enabled, False=Disabled
-  * *returns*: &nbsp; [true](true) or [false](false)
-  * *type*: &nbsp; [bool](bool)
-  * *instantiated value*: &nbsp; [false](false)
-* __url__: &nbsp; The parsed URL value extracted from an existing .git/config file in the object instantiation path.
-  * *returns*: &nbsp; *url string* [->](->) `https://github.com/namespace/repository`
-  * *type*: &nbsp; [str](str)
-  * *instantiated value*: &nbsp; __*URL string parsed from .git/config in directory path specified during object instantiation*__
-* __provider__: &nbsp; The parsed provider (*github.com*, *gitlab.com*, or *bitbucket.org*) from a given URL string
-  * *returns*: &nbsp; Provider string [->](->) `github.com`
-  * *type*: &nbsp; [str](str)
-  * *instantiated value*: &nbsp; __*Provider string parsed from object url property during object instantiation*__
-* __user__: &nbsp; If a user was used in the config url, then the value of the user will be assigned to this property.
-  * *returns*: &nbsp; User string [->](->) `username`
-  * *type*: &nbsp; [str](str)
-  * *instantiated value*: &nbsp; __*User string parsed from object url property during object instantiation*__
-* __log__: &nbsp; The class logger. Will either write directly to stdout, stderr, or to a lob object if passed into the object constructor during object instantiation.
-  * *returns*: &nbsp; `Log Stream`
-  * *type*: &nbsp; [str](str)
-  * *instantiated value*: &nbsp; __*Logs written to stdout, stderr*__
+<br>
+
+| __[verbose]('')__ |  *Verbose setting that controls logging level within the object. &nbsp; [[true]('')=enabled, [false]('')=disabled]* |
+|:---------------------|:--------------------------------------------------------|
+| *returns*            | [true](true) or [false](false) *(enabled or disabled)*  |
+| *type*               | [bool](https://docs.python.org/3/library/stdtypes.html) |
+| *instantiated value* | [false](false)                                          |
 
 <br>
 
-### Available Methods
+| __[url]('')__ |  *Verbose setting that controls logging level within the object. &nbsp; [[true]('')=enabled, [false]('')=disabled]* |
+|:---------------------|:---------------------------------------------------------------------------------------------|
+| *returns*            | *url string* [->](->) `https://github.com/namespace/repository`                              |
+| *type*               | [str](https://docs.python.org/3/library/stdtypes.html)                                       |
+| *instantiated value* | *URL string parsed from .git/config in directory path specified during object instantiation* |
+
+<br>
+
+| __[provider]('')__   |  *The parsed provider (*github.com*, *gitlab.com*, or *bitbucket.org*) from a given URL string* |
+|:---------------------|:-------------------------------------------------------------------------------|
+| *returns*            | Provider string [->](->) `github.com`                                          |
+| *type*               | [str](https://docs.python.org/3/library/stdtypes.html)                         |
+| *instantiated value* | *Provider string parsed from object url property during object instantiation*  |
+
+<br>
+
+| __[user]('')__       |  *If a user was used in the config url, then the value of the user will be assigned to this property* |
+|:---------------------|:-------------------------------------------------------------------------------|
+| *returns*            | User string [->](->) `username`                                                |
+| *type*               | [str](https://docs.python.org/3/library/stdtypes.html)                         |
+| *instantiated value* | *User string parsed from object url property during object instantiation*      |
+
+<br>
+
+| __[log]('')__        |  *The class logger. Will either write directly to stdout, stderr, or to a lob object if passed into the object constructor during object instantiation* |
+|:---------------------|:-------------------------------------------------------------------------------|
+| *returns*            | Log Event Stream                                                               |
+| *type*               | [str](https://docs.python.org/3/library/stdtypes.html)                         |
+| *instantiated value* | *Logs written to stdout, stderr*                                               |
+
+<br><br>
+
+### GitConfigParser Available Methods
 
 -----
 
@@ -141,40 +167,41 @@ The following methods are available to an instantiated object instance. Some of 
 
 <br>
 
-#### verbose
+__[verbose]('')__
 
 Setter method for `verbose` property that enables or disables verbose mode
 
-* *arg type*: &nbsp; [bool](bool)
-* *Note*: &nbsp; __True enables verbose logging, False disables it.__
+<br>
+
+| parameter   | type       | required     | arg info                                                   |
+|:-----------:|:----------:|:------------:|:-----------------------------------------------------------|
+| verbose | [bool]('')  | [true](true) | *[True]('') enables verbose logging, [False]('') disables it* |
 
 <br>
 
-`Usage Example`
+__Example method call:__
 
 ```python
 GitConfigParserObj.verbose = True
 ```
 
-<br>
+<br><br>
 
-#### log
+__[log]('')__
 
 Method to enable logging throughout the class. Log messages are sent to the log method providing the log message, the message type being one of `[debug, info, warning, error]`, and finally the function or method id that is automatically derived within the function or method using the python inspect module. If a log object such as a logger or an already instantiated log object instance was passed to the class constructor during the objects instantiation, then all logs will be written to the provided log object. If no log object was provided during instantiation then all `debug`, `info`, and `warning` logs will be written to stdout, while any encountered `error` log entries will be written to stderr. Note that debug or verbose mode needs to be enabled to receive the event log stream.
 
-* __log_msg__: &nbsp; The actual message being sent to the log method
-  * *arg type*: &nbsp; [str](str)
-  * *required*: &nbsp; [true](true)
-* __log_type__: &nbsp; The type of message that is being sent to the log method, one of `[debug, info, warning, error]`.
-  * *arg type*: &nbsp; [str](str)
-  * *required*: &nbsp; [true](true)
-* __log_id__: &nbsp; A string value identifying the sender method or function, consisting of the method or function name.
-  * *arg type*: &nbsp; [str](str)
-  * *required*: &nbsp; [true](true)
+<br>
 
-  <br>
+| arg     | type       | required     | arg info                                          |
+|:-------:|:----------:|:------------:|:--------------------------------------------------|
+| log_msg | [str]('')  | [true](true) | *The actual message being sent to the log method* |
+| log_type | [str]('')  | [true](true) | *The type of message that is being sent to the log method, one of `[debug, info, warning, error]`* |
+| log_id | [str]('')  | [true](true) | *A string value identifying the sender method or function, consisting of the method or function name* |
 
-`Usage Example`
+<br>
+
+__Example method call:__
 
 ```python
 def my_function():
@@ -184,14 +211,19 @@ def my_function():
 
 <br><br>
 
-#### url
+__[url]('')__
 
 Setter method for `url` property that will search the object instances set directory path and look for a .git/config directory in that path. If found, then the setter method will parse the .git/config file and look for a URL line to parse and extract the URL. It will then update the object property with the parsed value. If this method is called post instantiation, then a valid directory path must be provided as an argument.
 
-* `Arg Type`: [type](str)
-* `Note`: Must be a valid directory path. This value is checked by `os.path.exists()` and will write an error to the log if the provided argument directory path does not exist.
+<br>
 
-`Usage Example`
+| parameter   | type       | required     | arg info                                          |
+|:-----------:|:----------:|:------------:|:--------------------------------------------------|
+| config_path | [str]('')  | [true](true) | *Must be a valid directory path. This value is checked by `os.path.exists()` and will write an error to the log if the provided argument directory path does not exist* |
+
+<br>
+
+__Example method call:__
 
 ```python
 GitConfigParserObj.url = /home/projects/my_project_directory
@@ -199,14 +231,19 @@ GitConfigParserObj.url = /home/projects/my_project_directory
 
 <br><br>
 
-#### provider
+__[provider]('')__
 
 Setter method for `provider` property that will search the object instances updated url property for a valid git provider string. Currently the provider setter will look specifically for a value that matches one of `[github.com, gitlab.com, bitbucket.org]`. If this method is called post instantiation, then a valid git repository url must be provided as an argument. The provider property setter will parse either an http, https, git or ssh formatted URL string. During the parse operation, if a user is identified in the provider string such as user@bitbucket.org, then the username will also be parsed and used to update the `user` object property.
 
-* `Arg Type`: [type](str)
-* `Note`: Must be a properly formatted URL string starting with one of `[http, https, git, ssh]` and must end in `.git`.
+<br>
 
-`Usage Example`
+| parameter      | type       | required     | arg info                                          |
+|:--------------:|:----------:|:------------:|:--------------------------------------------------|
+| repository_url | [str]('')  | [true](true) | *Must be a properly formatted URL string starting with one of `[http, https, git, ssh]` and must end in `.git`* |
+
+<br>
+
+__Example method call:__
 
 ```python
 GitConfigParserObj.provider = "git@github.com:namespace/repository.git"
@@ -217,6 +254,10 @@ GitConfigParserObj.provider = "git@github.com:namespace/repository.git"
 ### GitConfigParser Class Usage
 
 -----
+
+<br>
+
+#### Default Instantiation
 
 ```python
 from cloudmage-gitutils import GitConfigParser
@@ -241,7 +282,9 @@ print(repo_user) # None
 
 > ![CloudMage](https://github.com/TheCloudMage/Common-Images/raw/master/icons/note.png) &nbsp;&nbsp; [__Optional Verbose Class Constructor Argument:__](Note) <br> When instantiating the class an optional `verbose` argument can be provided. The argument expects a bool value of either `True` or `False`. By default verbose is set to False. If `verbose=True` is passed during object instantiation, then debug mode is turned on allowing the class to output DEBUG, INFO, and WARNING messages to stdout, and ERROR messages to stderr.
 
-<br>
+<br><br>
+
+#### Verbose Instantiation
 
 ```python
 from cloudmage-gitutils import GitConfigParser
@@ -268,7 +311,9 @@ print(repo_user) # None
 
 > ![CloudMage](https://github.com/TheCloudMage/Common-Images/raw/master/icons/note.png) &nbsp;&nbsp; [__Optional Log Object:__](Note) <br> When instantiating the class an optional `log` argument can also be provided. The argument expects an Logger object to be passed as an input. If passed then all DEBUG, INFO, WARNING, and ERROR messages will be printed to the standard log levels [`log.debug()`, `log.info()`, `log.warning()`, `log.error()`] and printed to the passed respective logger object method.
 
-<br>
+<br><br>
+
+#### Log Instantiation
 
 ```python
 from cloudmage-gitutils import GitConfigParser

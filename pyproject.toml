@@ -1,17 +1,38 @@
 [tool.poetry]
 name = "CloudMage-GitUtils"
-version = "0.0.4"
+version = "0.0.5"
 description = "Quickly and easily create usable Git repository objects from major Git platform providers automatically or by simply providing the repository URL."
-license = "GPL-3.0-or-later"
 authors = ["Rich Nason <rnason@cloudmage.io>"]
+maintainers = ["Rich Nason <rnason@cloudmage.io>"]
+license = "GPL-3.0-or-later"
 readme = "README.md"
 include = [
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "LICENSE"
 ]
 homepage = "https://github.com/TheCloudMage/PyPkgs-GitUtils"
-packages = [
-    {include = "gitutils"}
+repository = "https://github.com/TheCloudMage/PyPkgs-GitUtils"
+documentation = "https://github.com/TheCloudMage/PyPkgs-GitUtils"
+keywords = [
+    "Packages",
+    "CloudMage",
+    "Git"
 ]
+
+classifiers = [
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+packages = [
+    {include = "cloudmage"}
+]
+
+[tool.poetry.urls]
+"Releases" = "https://github.com/TheCloudMage/PyPkgs-GitUtils/releases"
+"Issues" = "https://github.com/TheCloudMage/PyPkgs-GitUtils/issues"
 
 [tool.poetry.dependencies]
 python = "^3.6"
@@ -23,12 +44,6 @@ pylint = "^2.4.4"
 coverage = "^5.0.3"
 
 [tool.poetry.scripts]
-GitConfigParser = 'gitutils.gitconfig_parser'
-GitHubAPI = 'gitutils.github_api'
-
-[tool.poetry.urls]
-"Releases" = "https://github.com/TheCloudMage/PyPkgs-GitUtils/releases"
-"Bug Tracking" = "https://github.com/TheCloudMage/PyPkgs-GitUtils/issues"
 
 [build-system]
 requires = ["poetry>=0.12"]

@@ -3,7 +3,7 @@
 ################
 # Imports:     #
 ################
-from gitutils import GitHubAPI
+from cloudmage.gitutils import GitHubAPI
 import pytest, sys
 
 NonValidRepositoryURL = "https://github.com/TheCloudMage/Mock-Repository.git"
