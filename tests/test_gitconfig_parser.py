@@ -20,7 +20,7 @@ from cloudmage.gitutils import GitConfigParser
 import pytest
 import os
 import shutil
-import sys
+# import sys
 
 # GitHub Style URLs
 GithubHttpUrl = "https://github.com/TheCloudMage/Mock-Repository.git"
@@ -1223,8 +1223,8 @@ def test_provider_property_setter_invalid_provider(capsys):
 
     # Capture stdout, stderr to test log messages
     out, err = capsys.readouterr()
-    sys.stdout.write(out)
-    sys.stderr.write(err)
+    # sys.stdout.write(out)
+    # sys.stderr.write(err)
 
     assert "ERROR   CLS->GitConfigParser.provider: \
 -> Parsed provider value: gethuub.com not found \
