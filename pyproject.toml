@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "CloudMage-GitUtils"
-version = "1.0.0"
+version = "1.0.1"
 description = "Git based helpers and Report Templates"
 authors = ["Rich Nason <rnason@cloudmage.io>"]
 maintainers = ["Rich Nason <rnason@cloudmage.io>"]
