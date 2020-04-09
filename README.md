@@ -6,9 +6,7 @@
 
 <br/>
 
-![PyTests](https://github.com/TheCloudMage/PyPkgs-GitUtils/workflows/PyTests/badge.svg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Coverage](https://github.com/TheCloudMage/PyPkgs-GitUtils/workflows/Coverage/badge.svg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![codecov](https://codecov.io/gh/TheCloudMage/PyPkgs-GitUtils/branch/master/graph/badge.svg)](https://codecov.io/gh/TheCloudMage/PyPkgs-GitUtils)
-
-<br/><br/>
+![PyTests](https://github.com/CloudMages/PyPkgs-GitUtils/workflows/PyTests/badge.svg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Coverage](https://github.com/CloudMages/PyPkgs-GitUtils/workflows/Coverage/badge.svg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![codecov](https://codecov.io/gh/CloudMages/PyPkgs-GitUtils/branch/master/graph/badge.svg)](https://codecov.io/gh/CloudMages/PyPkgs-GitUtils)
 
 <br/><br/>
 
