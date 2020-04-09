@@ -4,6 +4,12 @@
 
 ![CloudMage](https://cloudmage-images-public.s3.us-east-2.amazonaws.com/banners/cloudmage-nebula-glow.png)
 
+<br/>
+
+![PyTests](https://github.com/TheCloudMage/PyPkgs-JinjaUtils/workflows/PyTests/badge.svg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Coverage](https://github.com/TheCloudMage/PyPkgs-JinjaUtils/workflows/Coverage/badge.svg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![codecov](https://codecov.io/gh/TheCloudMage/PyPkgs-JinjaUtils/branch/master/graph/badge.svg)](https://codecov.io/gh/TheCloudMage/PyPkgs-JinjaUtils)
+
+<br/><br/>
+
 <br/><br/>
 
 ## Table of Contents
