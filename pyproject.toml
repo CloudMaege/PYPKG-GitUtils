@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "CloudMage-GitUtils"
-version = "0.0.5"
-description = "Quickly and easily create usable Git repository objects from major Git platform providers automatically or by simply providing the repository URL."
+version = "1.0.0"
+description = "Git based helpers and Report Templates"
 authors = ["Rich Nason <rnason@cloudmage.io>"]
 maintainers = ["Rich Nason <rnason@cloudmage.io>"]
 license = "GPL-3.0-or-later"
@@ -10,9 +10,9 @@ include = [
     "CHANGELOG.md",
     "LICENSE"
 ]
-homepage = "https://github.com/TheCloudMage/PyPkgs-GitUtils"
-repository = "https://github.com/TheCloudMage/PyPkgs-GitUtils"
-documentation = "https://github.com/TheCloudMage/PyPkgs-GitUtils"
+homepage = "https://github.com/CloudMages/PyPkgs-GitUtils"
+repository = "https://github.com/CloudMages/PyPkgs-GitUtils"
+documentation = "https://github.com/CloudMages/PyPkgs-GitUtils"
 keywords = [
     "Packages",
     "CloudMage",
@@ -31,12 +31,15 @@ packages = [
 ]
 
 [tool.poetry.urls]
-"Releases" = "https://github.com/TheCloudMage/PyPkgs-GitUtils/releases"
-"Issues" = "https://github.com/TheCloudMage/PyPkgs-GitUtils/issues"
+"Releases" = "https://github.com/CloudMages/PyPkgs-GitUtils/releases"
+"Issues" = "https://github.com/CloudMages/PyPkgs-GitUtils/issues"
 
 [tool.poetry.dependencies]
 python = "^3.6"
 requests = "^2.22.0"
+PyGithub = "^1.47"
+progress = "^1.5"
+cloudmage-jinjautils = "^1.0.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^4.6"

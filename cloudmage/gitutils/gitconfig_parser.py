@@ -13,10 +13,10 @@
 # Imports:    #
 ###############
 # Import Base Python Modules
-import os
-import sys
+from datetime import datetime
 import inspect
-import datetime
+import sys
+import os
 
 
 #####################
@@ -114,13 +114,12 @@ class GitConfigParser(object):
             Publish properly formatted exceptions
             to log object or stdout, stderr
         """
-        exc_msg = "EXCEPTION occurred in: '{}.{}', on line {}: -> {}".format(
-            self._log_context,
-            caller_function,
-            sys.exc_info()[2].tb_lineno,
-            str(exception_object)
+        this_exception_msg = (
+            "EXCEPTION occurred in: "
+            f"{self._log_context}.{caller_function}, on line "
+            f"{sys.exc_info()[2].tb_lineno}: -> {str(exception_object)}"
         )
-        self.log(exc_msg, 'error', caller_function)
+        self.log(this_exception_msg, 'error', caller_function)
 
     ############################################
     # Class Logger:                            #
@@ -142,48 +141,49 @@ class GitConfigParser(object):
             Log Stream
         """
         # Define this methods identity for functional logging:
-        self.__log_id = inspect.stack()[0][3]
+        __id = inspect.stack()[0][3]
         try:
             # Internal method variable assignments:
-            log_msg_caller = f"{self._log_context}.{log_id}"
+            this_log_msg_caller = f"{self._log_context}.{log_id}"
+
             # Set the log message offset based on the message type:
             # [debug=3, info=4, warning=1, error=3]
-            log_msg_offset = 3
+            this_log_msg_offset = 3
             if log_type.lower() == 'info':
-                log_msg_offset = 4
+                this_log_msg_offset = 4
             elif log_type.lower() == 'warning':
-                log_msg_offset = 1
+                this_log_msg_offset = 1
 
             # If a valid log object was passed into the class constructor,
             # publish the log to the log object:
             if self._log is not None:
                 # Set the log message prefix
-                log_message = f"{log_msg_caller}: -> {log_msg}"
+                this_log_message = f"{this_log_msg_caller}: -> {log_msg}"
                 if log_type.lower() == 'error':
-                    self._log.error(log_message)
+                    self._log.error(this_log_message)
                 elif log_type.lower() == 'warning':
-                    self._log.warning(log_message)
+                    self._log.warning(this_log_message)
                 elif log_type.lower() == 'info':
-                    self._log.info(log_message)
+                    self._log.info(this_log_message)
                 else:
-                    self._log.debug(log_message)
+                    self._log.debug(this_log_message)
             # If no valid log object was passed into the class constructor,
             # write the message to stdout, stderr:
             else:
-                log_message = "{}    {}{}{}: -> {}".format(
-                    datetime.datetime.now(),
+                this_log_message = "{}    {}{}{}: -> {}".format(
+                    datetime.now(),
                     log_type.upper(),
-                    " " * log_msg_offset,
-                    log_msg_caller,
+                    " " * this_log_msg_offset,
+                    this_log_msg_caller,
                     log_msg
                 )
                 if log_type.lower() == 'error':
-                    print(log_message, file=sys.stderr)
+                    print(this_log_message, file=sys.stderr)
                 else:
                     if self._verbose:
-                        print(log_message, file=sys.stdout)
+                        print(this_log_message, file=sys.stdout)
         except Exception as e:
-            self._exception_handler(self.__log_id, e)
+            self._exception_handler(__id, e)
 
     ################################################
     # Verbose Setter / Getter Methods:             #
@@ -196,10 +196,8 @@ class GitConfigParser(object):
         This method will return the verbose setting.
         """
         # Define this methods identity for functional logging:
-        self.__id = inspect.stack()[0][3]
-        self.log(
-            "{} property requested.".format(self.__id), 'info', self.__id
-        )
+        __id = inspect.stack()[0][3]
+        self.log(f"{__id} property requested.", 'info', __id)
         return self._verbose
 
     @verbose.setter
@@ -211,30 +209,23 @@ class GitConfigParser(object):
         bool value is provided.
         """
         # Define this methods identity for functional logging:
-        self.__id = inspect.stack()[0][3]
-        self.log(
-            "{} property update requested.".format(self.__id),
-            'info',
-            self.__id
-        )
+        __id = inspect.stack()[0][3]
+        self.log(f"{__id} property update requested.", 'info', __id)
+
+        # Check the value of verbose, and set accordingly
         if verbose is not None and isinstance(verbose, bool):
             self._verbose = verbose
             self.log(
-                "Updated {} property with value: {}".format(
-                    self.__id,
-                    self._verbose
-                ),
+                f"Updated {__id} property with value: {self._verbose}",
                 'info',
-                self.__id
+                __id
             )
         else:
             self.log(
-                "{} argument expected bool but received type: {}".format(
-                    self.__id,
-                    type(verbose)
-                ),
+                f"{__id} property argument expected type bool "
+                f"but received type: {type(verbose)}",
                 'error',
-                self.__id
+                __id
             )
 
     ################################################
@@ -248,19 +239,19 @@ class GitConfigParser(object):
         the property setter method.
         """
         # Define this methods identity for functional logging:
-        self.__id = inspect.stack()[0][3]
-        self.log(f"{self.__id} property requested.", 'info', self.__id)
+        __id = inspect.stack()[0][3]
+        self.log(f"{__id} property requested.", 'info', __id)
 
         if self._url is not None:
-            self.log(f"Return: {self._url}", 'debug', self.__id)
+            self.log(f"Return: {self._url}", 'debug', __id)
             return self._url
         else:
             self.log(
-                f"Return: {self.__id} has no value assigned!",
+                f"Return: {__id} has no value assigned!",
                 'warning',
-                self.__id
+                __id
             )
-            return f"{self.__id} property has no value assigned!"
+            return f"{__id} property has no value assigned!"
 
     @url.setter
     def url(self, config_path):
@@ -271,8 +262,8 @@ class GitConfigParser(object):
         found in the path location.
         """
         # Define this methods identity for functional logging:
-        self.__id = inspect.stack()[0][3]
-        self.log(f"{self.__id} property update requested.", 'info', self.__id)
+        __id = inspect.stack()[0][3]
+        self.log(f"{__id} property update requested.", 'info', __id)
 
         # Ensure that a valid config_path value was passed.
         if config_path is not None and isinstance(config_path, str):
@@ -282,7 +273,7 @@ class GitConfigParser(object):
             self.log(
                 f"Searching for git config in path: {git_config_path}",
                 'debug',
-                self.__id
+                __id
             )
 
             # If the provided path exists, then attempt to extract the url
@@ -294,7 +285,7 @@ class GitConfigParser(object):
                 self.log(
                     ".git/config found! Searching for repository url...",
                     'debug',
-                    self.__id
+                    __id
                 )
 
                 with open(git_config_path) as f:
@@ -304,17 +295,17 @@ class GitConfigParser(object):
                         line = file_line.strip()
                         if line and 'url' in line:
                             self.log(
-                                f"URL string match found in .git/config -> \
-line: {line}",
+                                f"URL string match found in .git/config -> "
+                                f"line: {line}",
                                 'debug',
-                                self.__id
+                                __id
                             )
                             k, v = line.partition("=")[::2]
                             git_config_url = v.strip()
                             self.log(
                                 f"Parsing URL string match: {git_config_url}",
                                 'debug',
-                                self.__id
+                                __id
                             )
                             # If the found URL string starts and ends with
                             # proper criteria, assign the value and break.
@@ -326,38 +317,39 @@ line: {line}",
                             ) and git_config_url.endswith('.git'):
                                 self._url = git_config_url
                                 self.log(
-                                    f"URL string match verified... \
-Updating url property with value: {self._url}",
+                                    "URL string match verified... "
+                                    "Updating url property with value: "
+                                    f"{self._url}",
                                     'info',
-                                    self.__id
+                                    __id
                                 )
                                 break
                             else:
                                 self.log(
-                                    "URL match failed format verification on \
-matched string: {git_config_url}",
+                                    "URL match failed format verification on "
+                                    "matched string: {git_config_url}",
                                     'warning',
-                                    self.__id
+                                    __id
                                 )
                                 continue
                         else:
                             self.log(
                                 f"URL' match not found in line: {line}",
                                 'debug',
-                                self.__id
+                                __id
                             )
             else:
                 self.log(
                     "Provided directory path doesn't exist. Aborting update!",
                     'error',
-                    self.__id
+                    __id
                 )
         else:
             self.log(
-                f"{self.__id} path argument expected string but received \
-type: {type(config_path)}",
+                f"{__id} path argument expected string but received "
+                f"type: {type(config_path)}",
                 'error',
-                self.__id
+                __id
             )
 
     ################################################
@@ -372,19 +364,19 @@ type: {type(config_path)}",
         properly by the property setter method.
         """
         # Define this methods identity for functional logging:
-        self.__id = inspect.stack()[0][3]
-        self.log(f"{self.__id} property requested.", 'info', self.__id)
+        __id = inspect.stack()[0][3]
+        self.log(f"{__id} property requested.", 'info', __id)
 
         if self._provider is not None:
-            self.log(f"Return: {self._provider}", 'debug', self.__id)
+            self.log(f"Return: {self._provider}", 'debug', __id)
             return self._provider
         else:
             self.log(
-                f"Return: {self.__id} property has no value assigned!",
+                f"Return: {__id} property has no value assigned!",
                 'warning',
-                self.__id
+                __id
             )
-            return f"{self.__id} property has no value assigned!"
+            return f"{__id} property has no value assigned!"
 
     @provider.setter
     def provider(self, repository_url):
@@ -395,14 +387,14 @@ type: {type(config_path)}",
         provider, such as github, gitlab, or bitbucket.
         """
         # Define this methods identity for functional logging:
-        self.__id = inspect.stack()[0][3]
-        self.log(f"{self.__id} property update requested.", 'info', self.__id)
+        __id = inspect.stack()[0][3]
+        self.log(f"{__id} property update requested.", 'info', __id)
 
         if repository_url is not None and isinstance(repository_url, str):
             self.log(
                 f"Searching for git provider in URL: {repository_url}",
                 'debug',
-                self.__id
+                __id
             )
             # Parse the provided repository url and attempt to
             # extract the provider.
@@ -414,10 +406,10 @@ type: {type(config_path)}",
             )) and repository_url.endswith('.git'):
                 provider_git_url = repository_url.strip().split("/")
                 self.log(
-                    f"URL format validated, splitting into search list: \
-{provider_git_url}",
+                    "URL format validated, splitting into search list: "
+                    f"{provider_git_url}",
                     'debug',
-                    self.__id
+                    __id
                 )
                 if len(provider_git_url) == 2:
                     provider_string = provider_git_url[-2].split(
@@ -439,17 +431,17 @@ type: {type(config_path)}",
                     if '@' in provider_string:
                         self._user = provider_string.split('@')[0]
                         self.log(
-                            f"User detected in provider string, \
-updating user attribute: {self._user}",
+                            "User detected in provider string, "
+                            f"updating user attribute: {self._user}",
                             'debug',
-                            self.__id
+                            __id
                         )
                         provider_string = provider_string.split('@')[1]
                     else:
                         self.log(
                             f"No User detected in provider string",
                             'debug',
-                            self.__id
+                            __id
                         )
                     # Now the provider string should be the target provider,
                     # set the internal class attribute.
@@ -457,28 +449,28 @@ updating user attribute: {self._user}",
                     self.log(
                         f"Provider match {self._provider} found!",
                         'debug',
-                        self.__id
+                        __id
                     )
                 else:
                     self.log(
-                        f"Parsed provider value: {provider_string} not found \
-or invalid. Aborting provider search!",
+                        f"Parsed provider value: {provider_string} not found "
+                        "or invalid. Aborting provider search!",
                         'error',
-                        self.__id
+                        __id
                     )
             else:
                 self.log(
-                    f"URL {repository_url} not properly formatted, \
-aborting provider search...",
+                    f"URL {repository_url} not properly formatted, "
+                    "aborting provider search...",
                     'error',
-                    self.__id
+                    __id
                 )
         else:
             self.log(
-                f"{self.__id} repository url argument expected string but \
-received type: {type(repository_url)}",
+                f"{__id} repository url argument expected string but "
+                "received type: {type(repository_url)}",
                 'error',
-                self.__id
+                __id
             )
 
     ################################################
@@ -493,16 +485,16 @@ received type: {type(repository_url)}",
         This value is set within the provider setter.
         """
         # Define this methods identity for functional logging:
-        self.__id = inspect.stack()[0][3]
-        self.log(f"{self.__id} property requested.", 'info', self.__id)
+        __id = inspect.stack()[0][3]
+        self.log(f"{__id} property requested.", 'info', __id)
 
         if self._user is not None:
-            self.log(f"Return: {self._user}", 'debug', self.__id)
+            self.log(f"Return: {self._user}", 'debug', __id)
             return self._user
         else:
             self.log(
-                f"Return: {self.__id} has no value assigned!",
+                f"Return: {__id} has no value assigned!",
                 'warning',
-                self.__id
+                __id
             )
-            return f"{self.__id} property has no value assigned!"
+            return f"{__id} property has no value assigned!"

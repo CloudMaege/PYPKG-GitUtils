@@ -261,7 +261,7 @@ def test_verbose_setter_invalid(capsys):
     # sys.stdout.write(out)
     # sys.stderr.write(err)
     assert "ERROR   CLS->GitConfigParser.verbose: \
--> verbose argument expected bool but received" in err
+-> verbose property argument expected type bool but received type:" in err
 
 
 ######################################
@@ -507,7 +507,7 @@ def test_exception_handler(capsys):
     # sys.stdout.write(out)
     # sys.stderr.write(err)
     assert "ERROR   CLS->GitConfigParser.log: \
--> EXCEPTION occurred in: 'CLS->GitConfigParser.log'" in err
+-> EXCEPTION occurred in: CLS->GitConfigParser.log" in err
 
 
 ######################################
