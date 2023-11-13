@@ -6,7 +6,7 @@
 
 <br/>
 
-[![PyTests](https://github.com/CloudMaege/PYPKG-GitUtils/actions/workflows/pytests.yml/badge.svg)](https://github.com/CloudMaege/PYPKG-GitUtils/actions/workflows/pytests.yml)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![Coverage](https://github.com/CloudMaege/PYPKG-GitUtils/actions/workflows/coverage.yml/badge.svg)](https://github.com/CloudMaege/PYPKG-GitUtils/actions/workflows/coverage.yml)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![codecov](https://codecov.io/gh/TheCloudMage/PyPkgs-GitUtils/branch/master/graph/badge.svg?token=WZLM392ZV4)](https://codecov.io/gh/TheCloudMage/PyPkgs-GitUtils)
+[![PyTests](https://github.com/CloudMaege/PYPKG-GitUtils/actions/workflows/pytests.yml/badge.svg)](https://github.com/CloudMaege/PYPKG-GitUtils/actions/workflows/pytests.yml)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![Coverage](https://github.com/CloudMaege/PYPKG-GitUtils/actions/workflows/coverage.yml/badge.svg)](https://github.com/CloudMaege/PYPKG-GitUtils/actions/workflows/coverage.yml)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![codecov](https://codecov.io/gh/CloudMaege/PYPKG-GitUtils/graph/badge.svg?token=SMBiXk4WgW)](https://codecov.io/gh/CloudMaege/PYPKG-GitUtils)
 
 <br/><br/>
 
