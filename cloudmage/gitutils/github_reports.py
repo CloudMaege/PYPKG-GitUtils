@@ -18,7 +18,7 @@ from github import Github
 from progress.bar import Bar
 
 # Import Base Python Modules
-from datetime import datetime
+from datetime import datetime, timezone
 import inspect
 import sys
 import os
@@ -94,12 +94,12 @@ class GithubReports(object):
         self._log_context = "CLS->GitHubReports"
 
         # Class Private Properties and Attributes #
-        self._now = datetime.now()         # NOW
-        self._repo_namespace = None        # NAMESPACE
-        self._is_organization = False      # IS_ORG
-        self._notify = False               # NOTIFY
-        self._open_pr_threshold = 5        # OPEN_THRESHOLD
-        self._search_results = None        # Hold Search Results
+        self._now = datetime.now(timezone.utc)  # NOW
+        self._repo_namespace = None             # NAMESPACE
+        self._is_organization = False           # IS_ORG
+        self._notify = False                    # NOTIFY
+        self._open_pr_threshold = 5             # OPEN_THRESHOLD
+        self._search_results = None             # Hold Search Results
         self._template_path = os.path.join(
             os.getcwd(),
             "templates"
