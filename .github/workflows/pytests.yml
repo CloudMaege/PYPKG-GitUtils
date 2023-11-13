@@ -28,5 +28,5 @@ jobs:
           poetry install
       - name: Run PyTests
         run: |
-          export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          export GITHUB_TOKEN=${{ secrets.READ_REPOS }}
           poetry run pytest tests
