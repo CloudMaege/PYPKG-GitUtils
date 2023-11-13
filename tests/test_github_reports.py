@@ -1146,10 +1146,10 @@ def test_search_open_pulls(capsys):
     # Now that 0 results have been tested, poll an organization with
     # an Open PR
     search_results = GitHubReportObj.search_open_pulls(
-        repo_namespace="CloudMages"
+        repo_namespace="CloudMaege"
     )
     assert(GitHubReportObj._is_organization)
-    assert(GitHubReportObj._repo_namespace == "CloudMages")
+    assert(GitHubReportObj._repo_namespace == "CloudMaege")
     assert(bool(GitHubReportObj._search_results))
     assert(search_results is not None)
 
