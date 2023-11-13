@@ -32,6 +32,7 @@ jobs:
           poetry install
       - name: Run Coverage Reports
         run: |
+          export GITHUB_TOKEN=${{ secrets.READ_REPOS }}
           poetry run coverage run -m --omit=tests/* --source=. pytest tests/
           poetry run coverage xml --omit=tests/* -i
       - name: Upload Coverage to Codecov  
